@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dipn6t27p0nap"]
+[gd_scene format=3 uid="uid://dipn6t27p0nap"]
 
 [ext_resource type="PackedScene" uid="uid://bjmikbn4ac2lu" path="res://demo/assets/scenes/BuildingBlocks.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://1ev4o7q8l4ey" path="res://demo/assets/meshes/Compass.tscn" id="2_gjkdl"]

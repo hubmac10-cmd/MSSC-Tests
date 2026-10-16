@@ -14,8 +14,7 @@ public partial class PlayerMain : CharacterBody3D
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
-	private void Look(float yaw, float pitch)
-	{
+	private void Look(float yaw, float pitch) {
 		RotateY(yaw);
 		_head.RotateX(pitch);
 		var rot = _head.Rotation;
@@ -24,10 +23,10 @@ public partial class PlayerMain : CharacterBody3D
 	}
 
 	public override void _Input(InputEvent @event) {
-		if (@event is InputEventMouseMotion mouseMotion) {
+		if (@event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured) {
 			Look(-mouseMotion.Relative.X * MouseSensitivity, -mouseMotion.Relative.Y * MouseSensitivity);
 		}
-		if (@event.IsActionPressed("ui_cancel")) {
+		if (@event.IsActionPressed("escape")) {
 			Input.MouseMode = Input.MouseModeEnum.Visible;
 		}
 		if (@event.IsActionPressed("mouse1")) {
@@ -61,7 +60,6 @@ public partial class PlayerMain : CharacterBody3D
 		if (look != Vector2.Zero) {
 			Look(-look.X * StickSensitivity * d, -look.Y * StickSensitivity * d);
 		}
-
 
 		Velocity = velocity;
 		MoveAndSlide();

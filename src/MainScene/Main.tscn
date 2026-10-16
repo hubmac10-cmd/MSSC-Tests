@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://coa54u7qmwab0"]
+
+[ext_resource type="Script" uid="uid://cn3ga3rf6gb5i" path="res://src/MainScene/Main.cs" id="1_0lxnl"]
+[ext_resource type="PackedScene" uid="uid://bd20fiv1gyqqg" path="res://src/Player/VR/Player.tscn" id="2_0lxnl"]
+[ext_resource type="Terrain3DMaterial" uid="uid://dhg01ghx5s7xu" path="res://terrain/new_terrain_3d_material.tres" id="3_a1iml"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="3_tba7s"]
+[ext_resource type="Script" uid="uid://ck4yn3hxuobj7" path="res://addons/godot-xr-tools/player/player_body.gd" id="4_grq43"]
+[ext_resource type="Terrain3DAssets" uid="uid://cag0q3ae70aci" path="res://terrain/new_terrain_3d_assets.tres" id="4_tba7s"]
+
+[node name="Main" type="Node3D" unique_id=1456064230]
+script = ExtResource("1_0lxnl")
+
+[node name="Player" parent="." unique_id=663655428 instance=ExtResource("2_0lxnl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="PlayerBody" type="CharacterBody3D" parent="Player" unique_id=1129624168 groups=["player_body"] instance=ExtResource("3_tba7s")]
+process_priority = -100
+process_physics_priority = -100
+collision_layer = 524288
+collision_mask = 1023
+script = ExtResource("4_grq43")
+
+[node name="SunLight" type="DirectionalLight3D" parent="." unique_id=317410850]
+transform = Transform3D(1, 0, 0, 0, 0.90885186, 0.41711903, 0, -0.41711903, 0.90885186, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Terrain3D" type="Terrain3D" parent="." unique_id=698547318]
+data_directory = "res://terrain"
+material = ExtResource("3_a1iml")
+assets = ExtResource("4_tba7s")
+top_level = true
+metadata/_edit_lock_ = true
