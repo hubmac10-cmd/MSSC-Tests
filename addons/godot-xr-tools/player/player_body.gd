@@ -378,6 +378,9 @@ func teleport(target : Transform3D) -> void:
 	var inv_global_transform : Transform3D = global_transform.inverse()
 
 	# Get the player-to-origin transform
+	if not is_inside_tree() or not origin_node.is_inside_tree():
+		return
+	
 	var player_to_origin : Transform3D = inv_global_transform * origin_node.global_transform
 
 	# Set the player

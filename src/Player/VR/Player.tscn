@@ -3,7 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="1_eysa3"]
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="2_o6hx2"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="2_ukbot"]
+[ext_resource type="PackedScene" uid="uid://fiul51tsyoop" path="res://addons/godot-xr-tools/functions/function_teleport.tscn" id="3_63oxq"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="4_t0840"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="5_63oxq"]
+[ext_resource type="Script" uid="uid://ck4yn3hxuobj7" path="res://addons/godot-xr-tools/player/player_body.gd" id="6_l16vj"]
+[ext_resource type="PackedScene" uid="uid://c2q5phg8w08o" path="res://addons/godot-xr-tools/functions/movement_jump.tscn" id="6_x4l33"]
 
 [node name="Player" type="XROrigin3D" unique_id=663655428]
 
@@ -17,6 +21,10 @@ tracker = &"right_hand"
 
 [node name="MovementTurn" parent="RightHand" unique_id=1465607577 instance=ExtResource("2_ukbot")]
 turn_mode = 1
+step_turn_angle = 30.0
+
+[node name="FunctionTeleport" parent="RightHand" unique_id=191175428 instance=ExtResource("3_63oxq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 
 [node name="LeftHand" type="XRController3D" parent="." unique_id=51215642]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.052249536, 0, 0)
@@ -26,3 +34,13 @@ tracker = &"left_hand"
 
 [node name="MovementDirect" parent="LeftHand" unique_id=1886521719 instance=ExtResource("4_t0840")]
 strafe = true
+
+[node name="MovementJump" parent="LeftHand" unique_id=1943452925 instance=ExtResource("6_x4l33")]
+jump_button_action = "ax_button"
+
+[node name="PlayerBody" type="CharacterBody3D" parent="." unique_id=2036268805 groups=["player_body"] instance=ExtResource("5_63oxq")]
+process_priority = -100
+process_physics_priority = -100
+collision_layer = 524288
+collision_mask = 1023
+script = ExtResource("6_l16vj")

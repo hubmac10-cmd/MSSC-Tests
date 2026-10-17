@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bdhjwf33mjp7w"]
+
+[ext_resource type="Script" uid="uid://ceeqfjjcv4528" path="res://src/Menus/PauseMenu/PauseMenu.cs" id="1_ngktc"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=1917265013]
+process_mode = 3
+visible = false
+script = ExtResource("1_ngktc")
+
+[node name="Panel" type="Panel" parent="." unique_id=1098335895]
+self_modulate = Color(1, 1, 1, 0.4392157)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonContainer" type="VBoxContainer" parent="." unique_id=1358423788]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -141.5
+offset_top = -50.5
+offset_right = 141.5
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResumeButton" type="Button" parent="ButtonContainer" unique_id=2063255119]
+layout_mode = 2
+text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="ButtonContainer" unique_id=220316193]
+layout_mode = 2
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="ButtonContainer" unique_id=1323070267]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="ButtonContainer/ResumeButton" to="." method="OnResumeButtonPressed"]
+[connection signal="pressed" from="ButtonContainer/QuitButton" to="." method="OnQuitButtonPressed"]

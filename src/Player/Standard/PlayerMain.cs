@@ -26,12 +26,6 @@ public partial class PlayerMain : CharacterBody3D
 		if (@event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured) {
 			Look(-mouseMotion.Relative.X * MouseSensitivity, -mouseMotion.Relative.Y * MouseSensitivity);
 		}
-		if (@event.IsActionPressed("escape")) {
-			Input.MouseMode = Input.MouseModeEnum.Visible;
-		}
-		if (@event.IsActionPressed("mouse1")) {
-			Input.MouseMode = Input.MouseModeEnum.Captured;
-		}
 	}
 	public override void _PhysicsProcess(double delta) {
 		Vector3 velocity = Velocity;
