@@ -31,7 +31,7 @@ project/assembly_name="MSSC Tests"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg", "res://addons/lowpolyterrain/plugin.cfg")
 
 [input]
 

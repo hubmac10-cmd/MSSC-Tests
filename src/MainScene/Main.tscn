@@ -1,26 +1,311 @@
-[gd_scene format=3 uid="uid://coa54u7qmwab0"]
+[gd_scene format=4 uid="uid://coa54u7qmwab0"]
 
 [ext_resource type="Script" uid="uid://cn3ga3rf6gb5i" path="res://src/MainScene/Main.cs" id="1_0lxnl"]
 [ext_resource type="PackedScene" uid="uid://bg2xiknhhsldh" path="res://src/Player/Standard/Player.tscn" id="2_0lxnl"]
-[ext_resource type="Terrain3DMaterial" uid="uid://dhg01ghx5s7xu" path="res://terrain/new_terrain_3d_material.tres" id="3_a1iml"]
-[ext_resource type="Terrain3DAssets" uid="uid://cag0q3ae70aci" path="res://terrain/new_terrain_3d_assets.tres" id="4_tba7s"]
+[ext_resource type="Script" uid="uid://dxq4p56omxx80" path="res://addons/lowpolyterrain/LowPolyTerrainManager.gd" id="4_0lxnl"]
+[ext_resource type="Shader" uid="uid://dq4udl5a5fk1e" path="res://addons/lowpolyterrain/shader/terrain_paint_overlay.gdshader" id="5_a1iml"]
 [ext_resource type="PackedScene" uid="uid://bdhjwf33mjp7w" path="res://src/Menus/PauseMenu/PauseMenu.tscn" id="5_vxoli"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxoli"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tba7s"]
+render_priority = 0
+shader = ExtResource("5_a1iml")
+shader_parameter/paint_layer_1_color = Color(0.76, 0.7, 0.5, 1)
+shader_parameter/paint_layer_1_roughness = 0.85
+shader_parameter/paint_layer_1_detail_amount = 0.0
+shader_parameter/paint_layer_1_detail_normal_strength = 0.0
+shader_parameter/paint_layer_1_detail_size = 2.0
+shader_parameter/paint_layer_2_color = Color(0.45, 0.45, 0.47, 1)
+shader_parameter/paint_layer_2_roughness = 0.7
+shader_parameter/paint_layer_2_detail_amount = 0.0
+shader_parameter/paint_layer_2_detail_normal_strength = 0.0
+shader_parameter/paint_layer_2_detail_size = 2.0
+shader_parameter/paint_layer_3_color = Color(0.95, 0.96, 1, 1)
+shader_parameter/paint_layer_3_roughness = 0.25
+shader_parameter/paint_layer_3_detail_amount = 0.0
+shader_parameter/paint_layer_3_detail_normal_strength = 0.0
+shader_parameter/paint_layer_3_detail_size = 2.0
+shader_parameter/paint_layer_4_color = Color(0.35, 0.26, 0.18, 1)
+shader_parameter/paint_layer_4_roughness = 0.9
+shader_parameter/paint_layer_4_detail_amount = 0.0
+shader_parameter/paint_layer_4_detail_normal_strength = 0.0
+shader_parameter/paint_layer_4_detail_size = 2.0
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0lxnl"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_vxoli"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_a1iml"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_tba7s"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_grq43"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_dpkde"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0pl6v"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_5u615"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_euq76"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_tch6v"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_d72or"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_xjosa"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_sa5nw"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_iumfq"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_mpdmd"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_slsu8"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_3clmp"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_y44q2"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_7w40f"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_twxb2"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_mdtb7"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_x805b"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_54wdr"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_pbmax"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_npdt1"]
+data = PackedVector3Array(-5, 0, 5, -5, 0, 1, -1, 0, 5, -1, 0, 5, 5, 0, 1, 3, 0, 5, -1, 0, 5, -5, 0, 1, 5, 0, 1, 3, 0, 5, 5, 0, 1, 5, 0, 5, -5, 0, -3, -5, 0, -5, -1, 0, -5, 5, 0, 1, -1, 0, -5, 5, 0, -3, -5, 0, 1, -1, 0, -5, 5, 0, 1, -5, 0, 1, -5, 0, -3, -1, 0, -5, 5, 0, -3, -1, 0, -5, 3, 0, -5, 5, 0, -3, 3, 0, -5, 5, 0, -5)
 
 [node name="Main" type="Node3D" unique_id=1456064230]
 script = ExtResource("1_0lxnl")
 
 [node name="PlayerMain" parent="." unique_id=1751409063 instance=ExtResource("2_0lxnl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4999757, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.762503, 2.284771, -17.494041)
 
 [node name="SunLight" type="DirectionalLight3D" parent="." unique_id=317410850]
 transform = Transform3D(1, 0, 0, 0, 0.90885186, 0.41711903, 0, -0.41711903, 0.90885186, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Terrain3D" type="Terrain3D" parent="." unique_id=698547318]
-data_directory = "res://terrain"
-material = ExtResource("3_a1iml")
-assets = ExtResource("4_tba7s")
-top_level = true
+[node name="PauseMenu" parent="." unique_id=1917265013 instance=ExtResource("5_vxoli")]
+
+[node name="LowPolyTerrainManager" type="Node3D" parent="." unique_id=1860753075]
+script = ExtResource("4_0lxnl")
+chunk_activity_data = PackedByteArray("AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ==")
+custom_material = SubResource("StandardMaterial3D_vxoli")
+tool_mode = 7
+paint_material = SubResource("ShaderMaterial_tba7s")
+collision_cull_radius = 20.0
+_derived_cull_radius = 20.0
+collision_layer = 1
+global_height_data = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+global_paint_data = PackedByteArray("EgAAABIAAAAYAAAAHgAAAB4AAAASAAAAGAAAABgAAAAYAAAAEgAAAB4AAAAYAAAAGAAAAB4AAAAfAAAAHgAAABIAAAYMAAAMBwAAGAcAABgGAAASBgAAGRgAAAcYAAAHGAAABx8AAAAfAAAAHwAAAB8AAAAMEwAAAB8AAAYZAAAbBAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHgAAABIAAAAMAAAAAAAAAAAAAAAAAAAAGAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAAAAAB8AAAAfAAAAHwAAAB8BAAAeDAAAEx8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAAwTAAASDQAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAABgAAAAYAAAADAAAAAAAAAAAAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAABgAAGQAAAB8AAAAfAAAAHwAAAB8GAAAZGAAABx8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAeAQAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAeAAAAGAAAAAwAAAAAAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAAAAAHwAAAB8AAAAfAAAAHwAAAB8GAAAZGAAABx4AAAEfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAGAAAABIAAAAAAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAATAAAMAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfEgAADR4AAAEfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHgAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAABgAAAAGAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAANAAASAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfDAAAExIAAA0YAwAEHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAABgAAAAYAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB4AAAAMAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAANAAASAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAfAAAMEwAAEg0AAAYZAAAAHwAAAB8AAB0CAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAABIAAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAMAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAATAAAMDQAAEgcAABgHAAAYGQAABh8AAAAfAAAAHwAAAB8AAAABAAAeAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAGGQAAGAcAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAASAAAAHwAAAB8AAAAfAAAAHwAAABkAAAYHAAAYAAAAHwAAAB8AAAAfAQAAHhMAAAwfAAAAHwAAAB8AAAAHAAAYAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAB4BAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB4AAAAYAAAAHwAAAB8AAAAfAAAAHwAAAAcAABgAAAAfAAAAHwAAAB8AAAAfAAAAHwEAAB4fAAAAHwAAABkAAAYHAAAYAAAAHwAAAB8AAAAfAAAAHwAAAB8AHAADAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAYBwAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAABgAAAASAAAAHwAAAB8AAAAfAAAAHwAAAAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8fAAAAHwAAABMAAAwBAAAeAAAAHwAAAB8AAAAfAAAAHwAGABkAHAADAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAMEwAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAGAAAAB4AAAAeAAAAHgAAABIAAAAMAAAAHwAAAB8AAAAfAAAAHwAAAAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8fAAAADQAAEg0AABIAAAAfAAAAHwAAAB8AAAAfAAAAHwAKABUAHAADAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAYBwAAHwAAAB8AAAAfAAAAHwAAAB8AAAAeAAAAEgAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAEgAAABIAAAAYAAAAGAAAABIAAAAAAAAAHwAAAB8AAAADAAAcAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwEAAB4BAAAeAQAAHgcAABgAAAAfAAAAHwAAAB8AAAAfAAAAHwAQAA8AHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAeAQAAHwAAAB8AAAAfAAAAHwAAAB8AAAAYAAAAEgAAABIAAAAfAAAAHwAAABgAAAAeAAAAGAAAAAwAAAAMAAAADAAAAAAAAAAAAAAAHwAAAAMAABwAAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfABgABwAeAAEAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAYZAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAYAAAAEgAAABgAAAAfAAAAHwAAAB4AAAAfAAAAHwAAABgAAAAMAAAABgAAAAAAAAAAAAAAHwAAAAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAB4BAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAEgAAAB4AAAAfAAAAHwAAAB8AAAAeAAAAHgAAABgAAAAGAAAAAAAAAAAAAAAAAAAAHwAAAAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwERAA0AHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAADBMAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAeAAAAGAAAAB4AAAAfAAAAHwAAAB8AAAAfAAAAHgAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAHwAAAAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB4AAAAeAAAAGAAAAB4AAAAfAAAAHwAAAB8AAAAfAAAAGAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAHwAAABkAAAYAAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB4AAAAeAAAAHwAAAB8AAAAeAAAAGAAAABgAAAASAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwAAAB8AAAAfAAAAEwAADAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAdAAIAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAABhkAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAYAAAAEgAAAB4AAAAeAAAAEgAAABIAAAAMAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAPAAAQCQAAFgAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8ADAATAAwAEwAeAAEAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAGGQAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHgAAAB8AAAAeAAAAGAAAABgAAAAYAAAAEgAAAAwAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAGABkADAATABIADQAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHgAAAB4AAAAYAAAAGAAAABgAAAAYAAAADAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwAAAB8AAAAfAAAAHwAAABUAAAoAAAAfAwAAHAAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAGABkAEgANAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAPEAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAGAAAABgAAAAeAAAAEgAAABgAAAASAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAB4AAAAeAAAAAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAMABMAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAA8QAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAYAAAAGAAAABIAAAAYAAAAEgAAAAwAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAMABMAHQACAB8AAAYZAAAMEwAABhkAABINAAAeAQAAGAcAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAeAAAAGAAAABgAAAAeAAAAGAAAAAwAAAAMAAAADAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8KAAAVAAAAHxEAAA4fAAAAHwAAABgAAAcMEQACEg0AABgHAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAABIAAAASAAAAGAAAABgAAAASAAAABgAAAAYAAAAMAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAHwAAAB8AAAAfGAAABx8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAYAAAAGAAAABIAAAASAAAADAAAAAYAAAAMAAAABgAAAAYAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAHwAAAB8TAAAMHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHgAAAB4AAAASAAAADAAAAAwAAAAGAAAABgAAAAYAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4YAAAHHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHgAAAB8AAAAfAAAAHgAAABgAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAGAAAABgAAAASAAAADAAAAAwAAAAGAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAGAAAABIAAAAMAAAADAAAAAwAAAAMAAAABgAAAAYAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAWAAAAHgAAAB4AAAAfAAAAHgAAABIAAAAeAAAAHgAAABgAAAAfAAAAEgAAAAwAAAAMAAAABgAAAAwAAAAGAAAABgAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+metadata/_custom_type_script = "uid://dxq4p56omxx80"
 metadata/_edit_lock_ = true
 
-[node name="PauseMenu" parent="." unique_id=1917265013 instance=ExtResource("5_vxoli")]
+[node name="LowPolyTerrainManager_Collisions" type="Node3D" parent="." unique_id=1850079922]
+
+[node name="Static_Chunk_0_0" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1925050319 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+collision_mask = 0
+
+[node name="Chunk_0_0_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_0_0" unique_id=989318487]
+shape = SubResource("ConcavePolygonShape3D_0lxnl")
+
+[node name="Static_Chunk_1_0" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1994590912 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -5)
+collision_mask = 0
+
+[node name="Chunk_1_0_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_1_0" unique_id=533115658]
+shape = SubResource("ConcavePolygonShape3D_vxoli")
+
+[node name="Static_Chunk_2_0" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1938893510 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -5)
+collision_mask = 0
+
+[node name="Chunk_2_0_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_2_0" unique_id=256897993]
+shape = SubResource("ConcavePolygonShape3D_a1iml")
+
+[node name="Static_Chunk_3_0" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1301187218 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, -5)
+collision_mask = 0
+
+[node name="Chunk_3_0_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_3_0" unique_id=1309339133]
+shape = SubResource("ConcavePolygonShape3D_tba7s")
+
+[node name="Static_Chunk_4_0" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=362073163 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, -5)
+collision_mask = 0
+
+[node name="Chunk_4_0_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_4_0" unique_id=848001367]
+shape = SubResource("ConcavePolygonShape3D_grq43")
+
+[node name="Static_Chunk_0_1" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1722360300 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -15)
+collision_mask = 0
+
+[node name="Chunk_0_1_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_0_1" unique_id=1493437307]
+shape = SubResource("ConcavePolygonShape3D_dpkde")
+
+[node name="Static_Chunk_1_1" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=335466320 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -15)
+collision_mask = 0
+
+[node name="Chunk_1_1_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_1_1" unique_id=136821079]
+shape = SubResource("ConcavePolygonShape3D_0pl6v")
+
+[node name="Static_Chunk_2_1" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1211839564 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -15)
+collision_mask = 0
+
+[node name="Chunk_2_1_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_2_1" unique_id=1445806084]
+shape = SubResource("ConcavePolygonShape3D_5u615")
+
+[node name="Static_Chunk_3_1" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1560496836 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, -15)
+collision_mask = 0
+
+[node name="Chunk_3_1_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_3_1" unique_id=1675512915]
+shape = SubResource("ConcavePolygonShape3D_euq76")
+
+[node name="Static_Chunk_4_1" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1856523919 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, -15)
+collision_mask = 0
+
+[node name="Chunk_4_1_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_4_1" unique_id=1252641919]
+shape = SubResource("ConcavePolygonShape3D_tch6v")
+
+[node name="Static_Chunk_0_2" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1620221527 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -25)
+collision_mask = 0
+
+[node name="Chunk_0_2_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_0_2" unique_id=1890665809]
+shape = SubResource("ConcavePolygonShape3D_d72or")
+
+[node name="Static_Chunk_1_2" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=97856530 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -25)
+collision_mask = 0
+
+[node name="Chunk_1_2_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_1_2" unique_id=136198266]
+shape = SubResource("ConcavePolygonShape3D_xjosa")
+
+[node name="Static_Chunk_2_2" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=218077238 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -25)
+collision_mask = 0
+
+[node name="Chunk_2_2_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_2_2" unique_id=1992457878]
+shape = SubResource("ConcavePolygonShape3D_sa5nw")
+
+[node name="Static_Chunk_3_2" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=712857962 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, -25)
+collision_mask = 0
+
+[node name="Chunk_3_2_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_3_2" unique_id=1056894594]
+shape = SubResource("ConcavePolygonShape3D_iumfq")
+
+[node name="Static_Chunk_4_2" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1115833408 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, -25)
+collision_mask = 0
+
+[node name="Chunk_4_2_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_4_2" unique_id=1420252708]
+shape = SubResource("ConcavePolygonShape3D_mpdmd")
+
+[node name="Static_Chunk_0_3" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1543617373 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -35)
+collision_mask = 0
+
+[node name="Chunk_0_3_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_0_3" unique_id=819752700]
+shape = SubResource("ConcavePolygonShape3D_slsu8")
+
+[node name="Static_Chunk_1_3" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1669004696 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -35)
+collision_mask = 0
+
+[node name="Chunk_1_3_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_1_3" unique_id=2064145790]
+shape = SubResource("ConcavePolygonShape3D_3clmp")
+
+[node name="Static_Chunk_2_3" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=751509564 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -35)
+collision_mask = 0
+
+[node name="Chunk_2_3_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_2_3" unique_id=1021902685]
+shape = SubResource("ConcavePolygonShape3D_y44q2")
+
+[node name="Static_Chunk_3_3" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1722135898 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, -35)
+collision_mask = 0
+
+[node name="Chunk_3_3_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_3_3" unique_id=689579198]
+shape = SubResource("ConcavePolygonShape3D_7w40f")
+
+[node name="Static_Chunk_4_3" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1549296096 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, -35)
+collision_mask = 0
+
+[node name="Chunk_4_3_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_4_3" unique_id=939368311]
+shape = SubResource("ConcavePolygonShape3D_twxb2")
+
+[node name="Static_Chunk_0_4" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1633005834 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -45)
+collision_mask = 0
+
+[node name="Chunk_0_4_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_0_4" unique_id=1060732432]
+shape = SubResource("ConcavePolygonShape3D_mdtb7")
+
+[node name="Static_Chunk_1_4" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=979730341 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -45)
+collision_mask = 0
+
+[node name="Chunk_1_4_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_1_4" unique_id=552194112]
+shape = SubResource("ConcavePolygonShape3D_x805b")
+
+[node name="Static_Chunk_2_4" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=257802282 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -45)
+collision_mask = 0
+
+[node name="Chunk_2_4_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_2_4" unique_id=415874173]
+shape = SubResource("ConcavePolygonShape3D_54wdr")
+
+[node name="Static_Chunk_3_4" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=1466420037 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, -45)
+collision_mask = 0
+
+[node name="Chunk_3_4_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_3_4" unique_id=508548041]
+shape = SubResource("ConcavePolygonShape3D_pbmax")
+
+[node name="Static_Chunk_4_4" type="StaticBody3D" parent="LowPolyTerrainManager_Collisions" unique_id=951596318 groups=["Wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, -45)
+collision_mask = 0
+
+[node name="Chunk_4_4_Col" type="CollisionShape3D" parent="LowPolyTerrainManager_Collisions/Static_Chunk_4_4" unique_id=1891813766]
+shape = SubResource("ConcavePolygonShape3D_npdt1")
