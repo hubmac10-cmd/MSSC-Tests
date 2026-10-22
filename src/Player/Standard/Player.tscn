@@ -6,7 +6,7 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nxl24"]
 
-[node name="PlayerMain" type="CharacterBody3D" unique_id=1751409063]
+[node name="Player" type="CharacterBody3D" unique_id=1751409063]
 script = ExtResource("1_vy1tf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=453194025]
@@ -19,3 +19,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4654436, -0.48864567)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1913074102]
 mesh = SubResource("CapsuleMesh_nxl24")
+
+[node name="Gui" type="CanvasLayer" parent="." unique_id=682624372]
+
+[node name="StaminaBar" type="Panel" parent="Gui" unique_id=2127245326]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -15.0
+grow_horizontal = 2
+grow_vertical = 0
