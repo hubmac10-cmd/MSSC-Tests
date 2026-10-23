@@ -4,6 +4,7 @@ public partial class PlayerMain : CharacterBody3D
 {
 	[Export] public float SprintSpeed = 10.0f;
 	[Export] public float StandardSpeed = 5.0f;
+	[Export] public float CrouchSpeed = 2.5f;
 	[Export] public float StaminaRegeneration = 1.0f;
 	[Export] public float StaminaDrain = 1.0f;
 	[Export] public float JumpVelocity = 4.5f;
@@ -23,7 +24,9 @@ public partial class PlayerMain : CharacterBody3D
 	}
 
 	private bool IsSprinting = false;
+	private bool IsCrouching = false;
 
+	private Vector3 StandardPosition;
 	private Node3D Head;
 	private Panel StaminaBar;
 
@@ -33,6 +36,7 @@ public partial class PlayerMain : CharacterBody3D
 		Speed = StandardSpeed;
 		Stamina = MaxStamina;
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+		StandardPosition = Head.Position;
 	}
 
 	private void Look(float yaw, float pitch) {
@@ -68,25 +72,45 @@ public partial class PlayerMain : CharacterBody3D
 			}
 		} else if (!IsSprinting && Stamina < MaxStamina) {
 			Stamina = Mathf.Min(MaxStamina, Stamina + StaminaRegeneration);
+		} else if (IsCrouching && IsOnFloor()) {
+			Vector3 NewPosition = StandardPosition;
+			NewPosition.Y = 0.036f;
+			Head.Position = NewPosition;
+			Speed = CrouchSpeed;
+		} else if (!IsCrouching && IsOnFloor()) {
+			Head.Position = StandardPosition;
+			Speed = StandardSpeed;
 		}
 		
 		if (!IsOnFloor()) {
 			velocity += GetGravity() * d * 2;
 		}
 
-		if (Input.IsActionJustPressed("jump") && IsOnFloor()) {
+		if (Input.IsActionJustPressed("Jump") && IsOnFloor()) {
 			velocity.Y = JumpVelocity;
 		}
 
 		if (Input.IsActionJustPressed("Shift") && IsOnFloor()) {
-			IsSprinting = Stamina > 0.0f;
+			if (!IsCrouching) {
+				IsSprinting = Stamina > 0.0f;
+			}
 		}
 
 		if (Input.IsActionJustReleased("Shift")) {
-			IsSprinting = false;
+			if (!IsCrouching) {
+				IsSprinting = false;
+			}
 		}
 
-		Vector2 inputDir = Input.GetVector("left", "right", "forward", "backward");
+		if (Input.IsActionJustPressed("Crouch")) {
+			IsCrouching = true;
+		}
+
+		if (Input.IsActionJustReleased("Crouch")) {
+			IsCrouching = false;
+		}
+
+		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero) {
 			velocity.X = direction.X * Speed;
@@ -97,7 +121,7 @@ public partial class PlayerMain : CharacterBody3D
 			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
 		}
 
-		Vector2 look = Input.GetVector("look_left", "look_right", "look_up", "look_down");
+		Vector2 look = Input.GetVector("LookLeft", "LookRight", "LookUp", "LookDown");
 		if (look != Vector2.Zero) {
 			Look(-look.X * StickSensitivity * d, -look.Y * StickSensitivity * d);
 		}
