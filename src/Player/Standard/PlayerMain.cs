@@ -5,10 +5,10 @@ public partial class PlayerMain : CharacterBody3D
 	[Export] public float SprintSpeed = 10.0f;
 	[Export] public float StandardSpeed = 5.0f;
 	[Export] public float CrouchSpeed = 2.5f;
-	[Export] public float StaminaRegeneration = 1.0f;
-	[Export] public float StaminaDrain = 1.0f;
+	[Export] public float StaminaRegeneration = 0.05f;
+	[Export] public float StaminaDrain = 0.1f;
 	[Export] public float JumpVelocity = 4.5f;
-	[Export] public float MaxStamina = 1000.0f;
+	[Export] public float MaxStamina = 100.0f;
 	[Export] public float MouseSensitivity = 0.003f;
 	[Export] public float StickSensitivity = 2.5f;
 
@@ -22,9 +22,11 @@ public partial class PlayerMain : CharacterBody3D
 			UpdateStaminaBar();
 		}
 	}
+	private float MinStaminaToSprint;
 
 	private bool IsSprinting = false;
 	private bool IsCrouching = false;
+	private bool IsExhausted = false;
 
 	private Vector3 StandardPosition;
 	private Node3D Head;
@@ -37,6 +39,7 @@ public partial class PlayerMain : CharacterBody3D
 		Stamina = MaxStamina;
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		StandardPosition = Head.Position;
+		MinStaminaToSprint = MaxStamina * 0.05f;
 	}
 
 	private void Look(float yaw, float pitch) {
@@ -45,6 +48,37 @@ public partial class PlayerMain : CharacterBody3D
 		var rot = Head.Rotation;
 		rot.X = Mathf.Clamp(rot.X, Mathf.DegToRad(-89f), Mathf.DegToRad(89f));
 		Head.Rotation = rot;
+	}
+
+	private void Crouch() {
+		if (IsCrouching) {
+			Vector3 NewPosition = StandardPosition;
+			NewPosition.Y = 0.036f;
+			Head.Position = NewPosition;
+			Speed = CrouchSpeed;
+		} else if (!IsCrouching) {
+			Head.Position = StandardPosition;
+			Speed = StandardSpeed;
+		}
+	}
+
+	private void Sprint() {
+		if (IsSprinting) {
+			Speed = SprintSpeed;
+			Stamina = Mathf.Max(0.0f, Stamina - StaminaDrain);
+
+			if (Stamina <= 0.0f) {
+				IsSprinting = false;
+				IsExhausted = true;
+			}
+		} else {
+			if (Stamina < MaxStamina) {
+				Stamina = Mathf.Min(MaxStamina, Stamina + StaminaRegeneration);
+			}
+			if (IsExhausted && Stamina >= MinStaminaToSprint) {
+				IsExhausted = false;
+			}
+		}
 	}
 
 	public void UpdateStaminaBar() {
@@ -62,54 +96,34 @@ public partial class PlayerMain : CharacterBody3D
 		float d = (float)delta;
 
 		Speed = StandardSpeed;
-
-		if (IsSprinting && IsOnFloor()) {
-			Speed = SprintSpeed;
-			Stamina = Mathf.Max(0.0f, Stamina - StaminaDrain);
-
-			if (Stamina <= 0.0f) {
-				IsSprinting = false;
-			}
-		} else if (!IsSprinting && Stamina < MaxStamina) {
-			Stamina = Mathf.Min(MaxStamina, Stamina + StaminaRegeneration);
-		} else if (IsCrouching && IsOnFloor()) {
-			Vector3 NewPosition = StandardPosition;
-			NewPosition.Y = 0.036f;
-			Head.Position = NewPosition;
-			Speed = CrouchSpeed;
-		} else if (!IsCrouching && IsOnFloor()) {
-			Head.Position = StandardPosition;
-			Speed = StandardSpeed;
-		}
+		
+		Crouch();	
+		Sprint();
 		
 		if (!IsOnFloor()) {
-			velocity += GetGravity() * d * 2;
+			velocity += GetGravity() * d * 1.5f;
 		}
 
-		if (Input.IsActionJustPressed("Jump") && IsOnFloor()) {
+		if (Input.IsActionJustPressed("Jump") && IsOnFloor() && !IsCrouching) {
 			velocity.Y = JumpVelocity;
 		}
 
-		if (Input.IsActionJustPressed("Shift") && IsOnFloor()) {
-			if (!IsCrouching) {
-				IsSprinting = Stamina > 0.0f;
-			}
+		if (Input.IsActionPressed("Shift") && IsOnFloor() && !IsCrouching && !IsExhausted) {
+			IsSprinting = Stamina > 0.0f;
 		}
 
-		if (Input.IsActionJustReleased("Shift")) {
-			if (!IsCrouching) {
-				IsSprinting = false;
-			}
+		if (Input.IsActionJustReleased("Shift") && !IsCrouching) {
+			IsSprinting = false;
 		}
 
-		if (Input.IsActionJustPressed("Crouch")) {
+		if (Input.IsActionPressed("Crouch") && IsOnFloor() && !IsSprinting) {
 			IsCrouching = true;
 		}
 
-		if (Input.IsActionJustReleased("Crouch")) {
+		if (Input.IsActionJustReleased("Crouch") && !IsSprinting) {
 			IsCrouching = false;
 		}
-
+			
 		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero) {
