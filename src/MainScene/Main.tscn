@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cn3ga3rf6gb5i" path="res://src/MainScene/Main.cs" id="1_0lxnl"]
 [ext_resource type="PackedScene" uid="uid://bg2xiknhhsldh" path="res://src/Player/Standard/Player.tscn" id="2_0lxnl"]
 [ext_resource type="Script" uid="uid://dxq4p56omxx80" path="res://addons/lowpolyterrain/LowPolyTerrainManager.gd" id="4_0lxnl"]
+[ext_resource type="PackedScene" uid="uid://b4t1yinuegh73" path="res://src/Vehicles/SnowMobile/SnowMobile.tscn" id="5_a1iml"]
 [ext_resource type="PackedScene" uid="uid://bdhjwf33mjp7w" path="res://src/Menus/PauseMenu/PauseMenu.tscn" id="5_vxoli"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_t0qip"]
@@ -57,3 +58,6 @@ metadata/_custom_type_script = "uid://dxq4p56omxx80"
 metadata/_edit_lock_ = false
 
 [node name="Terrain_Assets" type="Node3D" parent="LowPolyTerrainManager" unique_id=400309211]
+
+[node name="SnowMobile" parent="." unique_id=1012896474 instance=ExtResource("5_a1iml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.139018, 0, -7.9355125)
