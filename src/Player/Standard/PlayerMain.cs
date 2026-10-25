@@ -2,13 +2,18 @@ using Godot;
 
 public partial class PlayerMain : CharacterBody3D
 {
+	[ExportCategory("Rodzaje Prękdkości i Ruchu")]
 	[Export] public float SprintSpeed = 10.0f;
 	[Export] public float StandardSpeed = 5.0f;
 	[Export] public float CrouchSpeed = 2.5f;
+	[Export] public float JumpVelocity = 4.5f;
+
+	[ExportCategory("Ustawienia Staminy")]
 	[Export] public float StaminaRegeneration = 0.05f;
 	[Export] public float StaminaDrain = 0.1f;
-	[Export] public float JumpVelocity = 4.5f;
 	[Export] public float MaxStamina = 100.0f;
+
+	[ExportCategory("Ustawienia Kamery")]
 	[Export] public float MouseSensitivity = 0.003f;
 	[Export] public float StickSensitivity = 2.5f;
 
