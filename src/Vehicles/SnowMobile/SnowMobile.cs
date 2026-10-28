@@ -1,57 +1,57 @@
 using Godot;
-using System.Collections.Generic;
+using Godot.Collections;
 
 public partial class SnowMobile : RigidBody3D
 {
+	#region Zmienne
+	// Eksporty
 	[ExportCategory("Przypisane Węzły")]
 	[Export] private Camera3D VehicleCamera;
 	[Export] private Marker3D ExitPoint;
-	[Export] private Area3D InteractionArea;
-	[Export] private AudioStreamPlayer3D SnowMobileSound;
+	[Export] private Node3D CenterOfMassNode;
+	[Export] private Array<RayCast3D> RayCasts;
 
 	[ExportCategory("Parametry Pojazdu")]
-	[Export] float EnginePower = 45.0f;
-	[Export] float MaxSpeed = 28.0f;
-	[Export] float SteeringSpeed = 2.0f;
-	[Export] float MaxSteerAngle = 0.55f;
-	[Export] float TrackGrip = 6.0f;
-	[Export] float SkiGrip = 9.0f;
+	[Export] public float EnginePower = 6000f;
+	[Export] public float MaxSpeed = 25f;
+	[Export] public float TurnTorque = 2500f;
+	[Export] public float LateralGrip = 4f;
 
 	[ExportCategory("Zawieszenie")]
-	[Export] private float SpringRestLength = 0.6f;
-	[Export] private float SpringStrength = 50.0f;
-	[Export] private float SpringDamper = 6.0f;
+	[Export] public float RestLength = 0.6f;
+	[Export] public float SpringStrength = 40f;
+	[Export] public float SpringDamping = 8f;  
 
 	[ExportCategory("System Przewrócenia")]
-	[Export] private float FlipCheckDelay = 1.5f;
+	[Export] private float FlipCheckDelay = 2.0f;
 
-	[ExportCategory("Ustawienia Kamery")]
-	[Export] public float MouseSensitivity = 0.003f;
-	[Export] public float StickSensitivity = 2.5f;
+	// AutoLoad
+	private GameManager GameManager;
+	public float MouseSensitivity;
+	public float StickSensitivity;
 
-	private float FlipTimer = 0.0f;
+	// Kamera
 	private float cameraPitch = 0.0f;
 	private float cameraYaw = 0.0f;
 
-	private List<RayCast3D> RayCasts = new List<RayCast3D>();
-
+	// Wchodzenie/wychodzenie
 	private bool IsOccupied = false;
 	private CharacterBody3D Driver = null;
 	private bool IsPlayerNearby = false;
 	private CharacterBody3D NearbyPlayer = null;
 
+	// Inne
+	private float FlipTimer = 0.0f;
 	private float CurrentSteerAngle = 0.0f;
+	#endregion
 
 	public override void _Ready() {
-		CenterOfMassMode = CenterOfMassModeEnum.Custom;
-		CenterOfMass = new Vector3(0, -0.6f, 0);
+		GameManager = GetNode<GameManager>("/root/GameManager");
+		MouseSensitivity = GameManager.MouseSensitivity;
+		StickSensitivity = GameManager.StickSensitivity;
 
-		RayCasts.Add(GetNode<RayCast3D>("RayFrontLeft"));
-		RayCasts.Add(GetNode<RayCast3D>("RayFrontRight"));
-		RayCasts.Add(GetNode<RayCast3D>("RayTrackFront"));
-		RayCasts.Add(GetNode<RayCast3D>("RayTrackRear"));
-		AngularDamp = 4.0f; 
-   		LinearDamp = 0.5f;
+		CenterOfMassMode = CenterOfMassModeEnum.Custom;
+		CenterOfMass = CenterOfMassNode.Position;
 
 		SetPhysicsProcess(false);
 	}
@@ -90,7 +90,6 @@ public partial class SnowMobile : RigidBody3D
 		Driver.ProcessMode = ProcessModeEnum.Disabled;
 
 		VehicleCamera.MakeCurrent();
-		SnowMobileSound.Playing = true;
 
 		SetPhysicsProcess(true);
 	}
@@ -101,7 +100,6 @@ public partial class SnowMobile : RigidBody3D
 		}
 
 		SetPhysicsProcess(false);
-		SnowMobileSound.Playing = false;
 
 		Driver.GlobalPosition = ExitPoint.GlobalPosition;
 		Driver.GlobalRotation = new Vector3(Driver.GlobalRotation.X, GlobalRotation.Y, Driver.GlobalRotation.Z);
@@ -109,7 +107,7 @@ public partial class SnowMobile : RigidBody3D
 		Driver.Visible = true;
 		Driver.ProcessMode = ProcessModeEnum.Inherit;
 
-		Camera3D PlayerCamera = Driver.GetNode<Node3D>("Head").GetNode<Camera3D>("Camera3D");
+		Camera3D PlayerCamera = Driver.GetNode<Node3D>("Head").GetNode<Camera3D>("Camera");
 		PlayerCamera.MakeCurrent();
 
 		IsOccupied = false;
@@ -132,65 +130,64 @@ public partial class SnowMobile : RigidBody3D
 
 	public override void _PhysicsProcess(double delta) {
 		float d = (float)delta;
-		HandleInputs(d);
-		ApplySuspensionAndForces(d);
 		CheckForFlip(d);
 
 		Vector2 look = Input.GetVector("LookLeft", "LookRight", "LookUp", "LookDown");
 		if (look != Vector2.Zero) {
 			Look(-look.X * StickSensitivity * d, -look.Y * StickSensitivity * d);
 		}
-	}
 
-	private void HandleInputs(float delta) {
-		var SteerInput = Input.GetAxis("MoveRight", "MoveLeft");
-		CurrentSteerAngle = Mathf.MoveToward(CurrentSteerAngle, SteerInput * MaxSteerAngle, SteeringSpeed * delta);
+		Basis Basis = GlobalTransform.Basis;
 
-		if (SteerInput == 0) {
-			CurrentSteerAngle = Mathf.MoveToward(CurrentSteerAngle, 0.0f, SteeringSpeed * 2.0f * delta);
-		}
-	}
+		int FrontGrounded = 0;
+		int RearGrounded = 0;
+		Vector3 NormalSum = Vector3.Zero;
 
-	private void ApplySuspensionAndForces(float delta) {
 		for (int i = 0; i < RayCasts.Count; i++) {
-			RayCast3D rc = RayCasts[i];
-			if (rc.IsColliding()) {
-				Vector3 hitPoint = rc.GetCollisionPoint();
-				Vector3 hitNormal = rc.GetCollisionNormal();
+			RayCast3D Ray = RayCasts[i];
+			if (!Ray.IsColliding())
+				continue;
 
-				Vector3 rayToHit = hitPoint - rc.GlobalPosition;
-				float distance = rayToHit.Length();
+			Vector3 Hit = Ray.GetCollisionPoint();
+			Vector3 Normal = Ray.GetCollisionNormal();
+			float Distance = Ray.GlobalPosition.DistanceTo(Hit);
+			float Compression = RestLength - Distance;
 
-				float compression = SpringRestLength - distance;
-				if (compression < 0) continue;
+			Vector3 Offset = Ray.GlobalPosition - GlobalPosition;
+			Vector3 PointVelocity = LinearVelocity + AngularVelocity.Cross(Offset);
+			float SpringVelocity = Normal.Dot(PointVelocity);
 
-				Vector3 pointVelocity = LinearVelocity + AngularVelocity.Cross(rc.GlobalPosition - GlobalPosition);
-				float velocityAlongNormal = pointVelocity.Dot(hitNormal);
+			float Force = (Compression * SpringStrength - SpringVelocity * SpringDamping) * Mass / RayCasts.Count;
+			Force = Mathf.Max(Force, 0f);
 
-				Vector3 suspensionForce = (hitNormal * compression * SpringStrength) - (hitNormal * velocityAlongNormal * SpringDamper);
-				ApplyForce(suspensionForce, rc.GlobalPosition - GlobalPosition);
+			ApplyForce(Normal * Force, Offset);
 
-				if (i >= 2) {
-					Vector3 forwardDir = -GlobalTransform.Basis.Z;
-					float speed = LinearVelocity.Dot(forwardDir);
-					float accelInput = Input.GetAxis("Brake", "Throttle");
-
-					if (Mathf.Abs(speed) < MaxSpeed) {
-						ApplyForce(forwardDir * (accelInput * EnginePower * 0.5f), rc.GlobalPosition - GlobalPosition);
-					}
-
-					Vector3 rightDir = GlobalTransform.Basis.X;
-					float lateralVelocity = pointVelocity.Dot(rightDir);
-					ApplyForce(-rightDir * lateralVelocity * TrackGrip * (Mass * 0.5f), rc.GlobalPosition - GlobalPosition);
-				} else {
-					Vector3 skiForward = (-GlobalTransform.Basis.Z).Rotated(GlobalTransform.Basis.Y, CurrentSteerAngle);
-					Vector3 rightDir = skiForward.Cross(hitNormal).Normalized();
-					float lateralVelocity = pointVelocity.Dot(rightDir);
-
-					ApplyForce(-rightDir * lateralVelocity * SkiGrip * (Mass * 0.5f), rc.GlobalPosition - GlobalPosition);
-				}
-			}
+			NormalSum += Normal;
+			if (i < 2) FrontGrounded++; else RearGrounded++;
 		}
+
+		int Grounded = FrontGrounded + RearGrounded;
+		if (Grounded == 0)
+			return;
+
+		Vector3 GroundNormal = NormalSum.Normalized();
+		Vector3 Forward = (-Basis.Z).Slide(GroundNormal).Normalized();
+		Vector3 Right = Basis.X.Slide(GroundNormal).Normalized();
+
+		float Throttle = Input.GetAxis("Brake", "Throttle");
+		float Steer = Input.GetAxis("MoveRight", "MoveLeft");
+		float ForwardSpeed = LinearVelocity.Dot(Forward);
+
+		float Traction = RearGrounded / 2f;
+		if (Mathf.Abs(ForwardSpeed) < MaxSpeed || Mathf.Sign(ForwardSpeed) != Mathf.Sign(Throttle))
+			ApplyCentralForce(Forward * Throttle * EnginePower * Traction);
+
+		float lateralSpeed = LinearVelocity.Dot(Right);
+		ApplyCentralForce(-Right * lateralSpeed * LateralGrip * Mass * (Grounded / 4f));
+
+		float SkiContact = FrontGrounded / 2f;
+		float SpeedFactor = Mathf.Clamp(ForwardSpeed / 10f, -1f, 1f);
+		ApplyTorque(GroundNormal * Steer * TurnTorque * SpeedFactor * SkiContact);
 	}
 
 	private void CheckForFlip(float delta) {

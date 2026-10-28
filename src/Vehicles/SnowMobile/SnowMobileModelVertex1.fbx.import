@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bwau2blbtou3p"
-path="res://.godot/imported/SnowMobileModel.fbx-c26c68440129100101a97c9f16b48ecc.scn"
+uid="uid://dcwi6tcldm5aw"
+path="res://.godot/imported/SnowMobileModelVertex1.fbx-512247cd198d2f937e851d6cf0e2fcef.scn"
 
 [deps]
 
-source_file="res://src/Vehicles/SnowMobile/SnowMobileModel.fbx"
-dest_files=["res://.godot/imported/SnowMobileModel.fbx-c26c68440129100101a97c9f16b48ecc.scn"]
+source_file="res://src/Vehicles/SnowMobile/SnowMobileModelVertex1.fbx"
+dest_files=["res://.godot/imported/SnowMobileModelVertex1.fbx-512247cd198d2f937e851d6cf0e2fcef.scn"]
 
 [params]
 
