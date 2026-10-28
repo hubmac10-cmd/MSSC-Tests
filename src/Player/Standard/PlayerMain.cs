@@ -18,7 +18,6 @@ public partial class PlayerMain : CharacterBody3D
 	[Export] private float SprintSpeed = 10.0f;
 	[Export] private float StandardSpeed = 5.0f;
 	[Export] private float CrouchSpeed = 2.5f;
-	
 
 	[ExportCategory("Ustawienia Staminy")]
 	[Export] private float StaminaRegeneration = 0.05f;
@@ -27,30 +26,31 @@ public partial class PlayerMain : CharacterBody3D
 	[Export] private float MinStaminaToSprint = 5.0f;
 
 	[ExportCategory("Ustawienia Kamery")]
-	[Export] private float BaseFov = 75.0f;
 	[Export] private float FovChange = 1.5f;
 	[Export] private bool EnableTilt = true;
 	[Export] private bool EnableBob = true;
-	[ExportGroup("Nachylenie Biegu")]
+	[ExportGroup("Nachylenie")]
+	[Export] private float CameraTiltSpeed = 10.0f;
 	[Export] private float RunPitch = 0.1f;
 	[Export] private float RunRoll = 0.25f;
 	[Export] private float MaxPitch = 1.0f;
 	[Export] private float MaxRoll = 2.5f;
-	[ExportGroup("Kiwanie Głową")]
-	[Export] private float BobFrequency = 2.4f;
+	[ExportGroup("Kiwanie")]
+	[Export] private float BobFrequency = 2.0f;
 	[Export] private float BobAmplitude = 0.08f;
 
 	// AutoLoad
 	private GameManager GameManager;
 	private float MouseSensitivity;
 	private float StickSensitivity;
+	private float BaseFov;
 
 	// Stamina i speed
 	private float Speed;
 	private float _stamina;
 	public float Stamina {
 		get => _stamina;
-		set { 
+		set {
 			_stamina = value;
 			UpdateStaminaBar();
 		}
@@ -68,11 +68,11 @@ public partial class PlayerMain : CharacterBody3D
 	#endregion
 
 	public override void _Ready() {
-		// AutoLoad i przypisywanie węzłów
-		Camera = Head.GetNode<Camera3D>("Camera");
+		// AutoLoad
 		GameManager = GetNode<GameManager>("/root/GameManager");
 		MouseSensitivity = GameManager.MouseSensitivity;
 		StickSensitivity = GameManager.StickSensitivity;
+		BaseFov = GameManager.BaseFov;
 
 		// Ustawianie domyślnych wartości
 		Camera.Fov = BaseFov;
@@ -152,7 +152,7 @@ public partial class PlayerMain : CharacterBody3D
 			Angles.Z -= SideTilt;
 		}
 
-		Camera.Rotation = Angles;
+		Camera.Rotation = Camera.Rotation.Lerp(Angles, CameraTiltSpeed * Delta);
 	}
 
 	public override void _PhysicsProcess(double delta) {

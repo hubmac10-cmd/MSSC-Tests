@@ -233,15 +233,18 @@ points = PackedVector3Array(-0.014059454, -0.0130915865, -0.012254194, -0.014059
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7qfx7"]
 points = PackedVector3Array(0, -0.011807541, -0.00639642, 0.01001337, -0.013366934, -0.013289014, 0.010609273, -0.017546216, -0.012279774, 0.010609273, -0.017619824, -0.01158912, 0, -0.011785732, -0.005361601, 0, -0.010594377, -0.006422, 0.014059454, -0.0130179785, -0.013289014, 0.013401621, -0.017587109, -0.012279774, 0.009959698, 0.001196485, -0.013289014, 0.013401621, -0.017660717, -0.01158912, 0, -0.011518563, -0.0014676573, 0, -0.005976176, -0.0061592255, 0.014059454, -0.0130915865, -0.012254194, 0.014055326, 0.001275545, -0.013289014, 0.01032302, 0.005313065, -0.012353025, 0.013570896, 0.0054902676, -0.012353025, 0.010547343, -0.009392118, -0.0034570685, 0.005521391, -0.011518563, -0.0014676573, 0, -0.007172982, -0.0014118468, 0, -0.005954366, -0.005124406, 0.011462528, 0.010190256, -0.008586981, 0.011462528, 0.00994217, -0.0092520565, 0.014055326, 0.001201937, -0.012254194, 0.011946958, 0.0062808692, -0.0066754725, 0.013570896, 0.0053430516, -0.011368203, 0.012336427, 0.009893099, -0.0092520565, 0.012336427, 0.010141185, -0.008586981, 0.005584697, -0.010305399, -0.001493237, 0.010497799, -0.007710046, -0.0034942748, 0.0053122058, -0.005959819, -0.0014362643, 0.0052488996, -0.007172982, -0.0014118468, 0, -0.005959819, -0.0014362643, 0.011750159, 0.009557774, -0.008019575, 0.011959344, 0.00890621, -0.007663783, 0.011754287, 0.006291773, -0.0066545433, 0.01198274, 0.009530513, -0.008019575, 0.011765297, 0.0089252945, -0.007650993)
 
-[node name="SnowMobile" type="RigidBody3D" unique_id=1012896474 node_paths=PackedStringArray("VehicleCamera", "ExitPoint", "CenterOfMassNode", "RayCasts")]
+[node name="SnowMobile" type="RigidBody3D" unique_id=1012896474 node_paths=PackedStringArray("Head", "Camera", "ExitPoint", "CenterOfMassNode", "SteeringNode", "RayCasts")]
 physics_material_override = SubResource("PhysicsMaterial_i23ty")
 linear_damp = 0.5
 angular_damp = 4.0
 script = ExtResource("1_i23ty")
-VehicleCamera = NodePath("VehicleCamera")
+Head = NodePath("Head")
+Camera = NodePath("Head/Camera")
 ExitPoint = NodePath("ExitPoint")
 CenterOfMassNode = NodePath("CenterOfMass")
+SteeringNode = NodePath("SteeringNode")
 RayCasts = [NodePath("Ray_FL"), NodePath("Ray_FR"), NodePath("Ray_RL"), NodePath("Ray_RR")]
+MaxRoll = 5.0
 
 [node name="RightSkid2" type="MeshInstance3D" parent="." unique_id=509465246]
 transform = Transform3D(65, 0, 0, 0, -2.8412403e-06, 65, 0, -65, -2.8412403e-06, 0, -0.4815576, -3.5506084)
@@ -258,8 +261,11 @@ transform = Transform3D(65, 0, 0, 0, -2.8412403e-06, 65, 0, -65, -2.8412403e-06,
 material_override = SubResource("StandardMaterial3D_7qfx7")
 mesh = SubResource("ArrayMesh_vtevu")
 
-[node name="VehicleCamera" type="Camera3D" parent="." unique_id=358202853]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.831, -0.9952419)
+[node name="Head" type="Node3D" parent="." unique_id=876636282]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.831, -0.995)
+
+[node name="Camera" type="Camera3D" parent="Head" unique_id=358202853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00024187565)
 
 [node name="InteractionArea" type="Area3D" parent="." unique_id=114985462]
 transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0, 0, -1.2878456)
@@ -284,8 +290,11 @@ mesh = SubResource("ArrayMesh_7c6ms")
 transform = Transform3D(65, 0, 0, 0, -2.8412403e-06, 65, 0, -65, -2.8412403e-06, 4.8758763e-16, -0.4815576, -3.5506084)
 shape = SubResource("ConvexPolygonShape3D_bg7v1")
 
-[node name="Steering" type="MeshInstance3D" parent="." unique_id=107517962]
-transform = Transform3D(65, 0, 0, 0, -2.8412403e-06, 65, 0, -65, -2.8412403e-06, 4.8758763e-16, -0.4815576, -3.5506084)
+[node name="SteeringNode" type="Node3D" parent="." unique_id=148559883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2365892, -1.9191881)
+
+[node name="Steering" type="MeshInstance3D" parent="SteeringNode" unique_id=107517962]
+transform = Transform3D(65, 0, 0, 0, -2.8412403e-06, 65, 0, -65, -2.8412403e-06, 4.8758763e-16, -0.7181468, -1.6314203)
 material_override = SubResource("StandardMaterial3D_7qfx7")
 mesh = SubResource("ArrayMesh_5ncar")
 

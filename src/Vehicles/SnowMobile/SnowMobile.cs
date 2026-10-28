@@ -5,17 +5,31 @@ public partial class SnowMobile : RigidBody3D
 {
 	#region Zmienne
 	// Eksporty
-	[ExportCategory("Przypisane Węzły")]
-	[Export] private Camera3D VehicleCamera;
+	[ExportCategory("Referencje")]
+	[Export] private Node3D Head;
+	[Export] private Camera3D Camera;
 	[Export] private Marker3D ExitPoint;
 	[Export] private Node3D CenterOfMassNode;
+	[Export] private Node3D SteeringNode;
 	[Export] private Array<RayCast3D> RayCasts;
+
+	[ExportCategory("Ustawienia Kamery")]
+	[Export] private float FovChange = 1.0f;
+	[Export] private bool EnableTilt = true;
+	[ExportGroup("Nachylenie")]
+	[Export] private float CameraTiltSpeed = 10.0f;
+	[Export] private float DriveRoll = 0.25f;
+	[Export] private float MaxRoll = 2.5f;
 
 	[ExportCategory("Parametry Pojazdu")]
 	[Export] public float EnginePower = 6000f;
 	[Export] public float MaxSpeed = 25f;
 	[Export] public float TurnTorque = 2500f;
 	[Export] public float LateralGrip = 4f;
+
+	[ExportCategory("Kierownica")]
+	[Export] private float MaxSteerAngle = 30.0f;
+	[Export] private float SteerReturnSpeed = 10.0f;
 
 	[ExportCategory("Zawieszenie")]
 	[Export] public float RestLength = 0.6f;
@@ -24,15 +38,17 @@ public partial class SnowMobile : RigidBody3D
 
 	[ExportCategory("System Przewrócenia")]
 	[Export] private float FlipCheckDelay = 2.0f;
+	[Export] private float FlipTimer = 1.5f;
 
 	// AutoLoad
 	private GameManager GameManager;
-	public float MouseSensitivity;
-	public float StickSensitivity;
+	private float MouseSensitivity;
+	private float StickSensitivity;
+	private float BaseFov;
 
 	// Kamera
-	private float cameraPitch = 0.0f;
-	private float cameraYaw = 0.0f;
+	private float CameraPitch = 0.0f;
+	private float CameraYaw = 0.0f;
 
 	// Wchodzenie/wychodzenie
 	private bool IsOccupied = false;
@@ -41,14 +57,16 @@ public partial class SnowMobile : RigidBody3D
 	private CharacterBody3D NearbyPlayer = null;
 
 	// Inne
-	private float FlipTimer = 0.0f;
+	private float FlipCheckTimer = 0.0f;
 	private float CurrentSteerAngle = 0.0f;
 	#endregion
 
 	public override void _Ready() {
+		// AutoLoad
 		GameManager = GetNode<GameManager>("/root/GameManager");
 		MouseSensitivity = GameManager.MouseSensitivity;
 		StickSensitivity = GameManager.StickSensitivity;
+		BaseFov = GameManager.BaseFov;
 
 		CenterOfMassMode = CenterOfMassModeEnum.Custom;
 		CenterOfMass = CenterOfMassNode.Position;
@@ -66,14 +84,14 @@ public partial class SnowMobile : RigidBody3D
 		}
 	}
 
-	private void Look(float yaw, float pitch) {
-		VehicleCamera.RotateY(yaw);
-		cameraPitch += pitch;
-		cameraPitch = Mathf.Clamp(cameraPitch, Mathf.DegToRad(-89f), Mathf.DegToRad(89f));
+	private void Look(float Yaw, float Pitch) {
+		Head.RotateY(Yaw);
+		CameraPitch += Pitch;
+		CameraPitch = Mathf.Clamp(CameraPitch, Mathf.DegToRad(-89f), Mathf.DegToRad(89f));
 
-		Vector3 rot = VehicleCamera.Rotation;
-		rot.X = cameraPitch;
-		VehicleCamera.Rotation = rot;
+		Vector3 rot = Head.Rotation;
+		rot.X = CameraPitch;
+		Head.Rotation = rot;
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -89,7 +107,7 @@ public partial class SnowMobile : RigidBody3D
 		Driver.Visible = false;
 		Driver.ProcessMode = ProcessModeEnum.Disabled;
 
-		VehicleCamera.MakeCurrent();
+		Camera.MakeCurrent();
 
 		SetPhysicsProcess(true);
 	}
@@ -128,15 +146,31 @@ public partial class SnowMobile : RigidBody3D
 		}
 	}
 
+	private void CalculateViewOffset(float Delta, Vector3 Velocity) {
+		var Angles = Vector3.Zero;
+
+		if (EnableTilt) {
+			var Right = GlobalTransform.Basis.X;
+
+			var RightDot = Velocity.Dot(Right);
+			var SideTilt = Mathf.Clamp(RightDot * Mathf.DegToRad(DriveRoll) * 5.0f, Mathf.DegToRad(-MaxRoll), Mathf.DegToRad(MaxRoll));
+			Angles.Z += SideTilt;
+		}
+
+		Camera.Rotation = Camera.Rotation.Lerp(Angles, CameraTiltSpeed * Delta);
+	}
+
 	public override void _PhysicsProcess(double delta) {
 		float d = (float)delta;
 		CheckForFlip(d);
 
+		// Obracanie kamerą na gamepadzie
 		Vector2 look = Input.GetVector("LookLeft", "LookRight", "LookUp", "LookDown");
 		if (look != Vector2.Zero) {
 			Look(-look.X * StickSensitivity * d, -look.Y * StickSensitivity * d);
 		}
 
+		// Sterowanie
 		Basis Basis = GlobalTransform.Basis;
 
 		int FrontGrounded = 0;
@@ -167,7 +201,7 @@ public partial class SnowMobile : RigidBody3D
 		}
 
 		int Grounded = FrontGrounded + RearGrounded;
-		if (Grounded == 0)
+		if (Grounded == 0 && !IsOccupied)
 			return;
 
 		Vector3 GroundNormal = NormalSum.Normalized();
@@ -188,25 +222,41 @@ public partial class SnowMobile : RigidBody3D
 		float SkiContact = FrontGrounded / 2f;
 		float SpeedFactor = Mathf.Clamp(ForwardSpeed / 10f, -1f, 1f);
 		ApplyTorque(GroundNormal * Steer * TurnTorque * SpeedFactor * SkiContact);
+
+		// Nachylenie Kamery
+		CalculateViewOffset(d, LinearVelocity);
+		
+		// Kierownica
+		float TargetAngle = Steer * Mathf.DegToRad(MaxSteerAngle);
+		CurrentSteerAngle = Mathf.Lerp(CurrentSteerAngle, TargetAngle, d * SteerReturnSpeed);
+
+		Vector3 wheelRot = SteeringNode.Rotation;
+		wheelRot.Y = CurrentSteerAngle; 
+		SteeringNode.Rotation = wheelRot;
+
+		// FOV
+		var VelocityClamped = Mathf.Clamp(LinearVelocity.Length(), 0.5f, MaxSpeed * 2.0f);
+		var TargetFov = BaseFov + FovChange + VelocityClamped;
+		Camera.Fov = Mathf.Lerp(Camera.Fov, TargetFov, d * 8.0f);
 	}
 
 	private void CheckForFlip(float delta) {
 		if (!IsOccupied) return;
 
-		float upDot = GlobalTransform.Basis.Y.Dot(Vector3.Up);
+		float UpDot = GlobalTransform.Basis.Y.Dot(Vector3.Up);
 
-		bool isUpsideDown = upDot < 0.1f;
-		bool isMovingSlowly = LinearVelocity.Length() < 1.5f;
+		bool IsUpsideDown = UpDot < 0.1f;
+		bool IsMovingSlowly = LinearVelocity.Length() < 1.5f;
 
-		if (isUpsideDown && isMovingSlowly) {
-	   		FlipTimer += delta;
+		if (IsUpsideDown && IsMovingSlowly) {
+	   		FlipCheckTimer += delta;
 		
-			if (FlipTimer >= FlipCheckDelay)
+			if (FlipCheckTimer >= FlipCheckDelay)
 			{
 				RightVehicle();
 			}
 		} else {
-			FlipTimer = 0.0f;
+			FlipCheckTimer = 0.0f;
 		}
 
 		if (Input.IsActionJustPressed("ResetVehicle")) {
@@ -225,6 +275,6 @@ public partial class SnowMobile : RigidBody3D
 		LinearVelocity = Vector3.Zero;
 		AngularVelocity = Vector3.Zero;
 	
-		FlipTimer = 0.0f;
+		FlipCheckTimer = 0.0f;
 	}
 }
