@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using Src.Autoload;
 
 public partial class SnowMobile : RigidBody3D
 {
@@ -41,7 +42,6 @@ public partial class SnowMobile : RigidBody3D
 	[Export] private float FlipTimer = 1.5f;
 
 	// AutoLoad
-	private GameManager GameManager;
 	private float MouseSensitivity;
 	private float StickSensitivity;
 	private float BaseFov;
@@ -63,10 +63,9 @@ public partial class SnowMobile : RigidBody3D
 
 	public override void _Ready() {
 		// AutoLoad
-		GameManager = GetNode<GameManager>("/root/GameManager");
-		MouseSensitivity = GameManager.MouseSensitivity;
-		StickSensitivity = GameManager.StickSensitivity;
-		BaseFov = GameManager.BaseFov;
+		MouseSensitivity = GameManager.Instance.MouseSensitivity;
+		StickSensitivity = GameManager.Instance.StickSensitivity;
+		BaseFov = GameManager.Instance.BaseFov;
 
 		CenterOfMassMode = CenterOfMassModeEnum.Custom;
 		CenterOfMass = CenterOfMassNode.Position;

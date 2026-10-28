@@ -1,4 +1,6 @@
 using Godot;
+using Src.Autoload;
+namespace PlayerMain;
 
 public partial class PlayerMain : CharacterBody3D
 {
@@ -40,7 +42,6 @@ public partial class PlayerMain : CharacterBody3D
 	[Export] private float BobAmplitude = 0.08f;
 
 	// AutoLoad
-	private GameManager GameManager;
 	private float MouseSensitivity;
 	private float StickSensitivity;
 	private float BaseFov;
@@ -69,10 +70,9 @@ public partial class PlayerMain : CharacterBody3D
 
 	public override void _Ready() {
 		// AutoLoad
-		GameManager = GetNode<GameManager>("/root/GameManager");
-		MouseSensitivity = GameManager.MouseSensitivity;
-		StickSensitivity = GameManager.StickSensitivity;
-		BaseFov = GameManager.BaseFov;
+		MouseSensitivity = GameManager.Instance.MouseSensitivity;
+		StickSensitivity = GameManager.Instance.StickSensitivity;
+		BaseFov = GameManager.Instance.BaseFov;
 
 		// Ustawianie domyślnych wartości
 		Camera.Fov = BaseFov;
